@@ -1,4 +1,3 @@
-# FROM alpine:3.19
 FROM ruby:3.3.5-alpine3.20
 
 ARG OPENTOFU_VERSION=1.8.1

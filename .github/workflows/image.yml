@@ -32,9 +32,14 @@ jobs:
         run: |
           echo "VERSION=${{ env.VERSION }}"
 
-#      - name: "Build image with tag ${{ env.COMMIT_TAG }}"
-#        uses: aevea/action-kaniko@v0.11.0
-#        with:
+      - name: "Build image with tag ${{ env.VERSION }}"
+        uses: aevea/action-kaniko@v0.13.0
+        with:
+          image: aaheiev/opentofu
+          tag: ${{ env.VERSION }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
 #          image: ${{ env.IMAGE_REPO_NAME }}
 #          registry: ghcr.io
 #          password: ${{ secrets.GITHUB_TOKEN }}
