@@ -1,3 +1,9 @@
+# Common files and dirs
+.env
+.env*
+.tmp
+.idea
+
 # Local .terraform directories
 **/.terraform/*
 
