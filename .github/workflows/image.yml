@@ -14,19 +14,33 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     name: Build and publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Set build version
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          OPENTOFU_VERSION=$(cat .opentofu.version)
+          VERSION="${OPENTOFU_VERSION}-${{ github.run_number }}"
+          echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
+          echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(echo $VERSION)"
+
+      - name: Show build version
+        run: |
+          echo "VERSION=${{ env.VERSION }}"
+
+#      - name: "Build image with tag ${{ env.COMMIT_TAG }}"
+#        uses: aevea/action-kaniko@v0.11.0
+#        with:
+#          image: ${{ env.IMAGE_REPO_NAME }}
+#          registry: ghcr.io
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#          build_file: ${{ env.DOCKER_PATH }}/Dockerfile
+#          tag: ${{ env.COMMIT_TAG }}
+#          tag_with_latest: false
+#          cache: true
+#          cache_registry: ${{ env.IMAGE_REPO_NAME }}-cache
+#          extra_args: --use-new-run --build-arg TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
