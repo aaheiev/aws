@@ -24,13 +24,10 @@ jobs:
         run: |
           OPENTOFU_VERSION=$(cat .opentofu.version)
           VERSION="${OPENTOFU_VERSION}-${{ github.run_number }}"
+          echo "OPENTOFU_VERSION=$(echo $OPENTOFU_VERSION)" >> $GITHUB_ENV
           echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
           echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
           echo "VERSION=$(echo $VERSION)"
-
-      - name: Show build version
-        run: |
-          echo "VERSION=${{ env.VERSION }}"
 
       - name: "Build image with tag ${{ env.VERSION }}"
         uses: aevea/action-kaniko@v0.13.0
@@ -39,6 +36,7 @@ jobs:
           tag: ${{ env.VERSION }}
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          extra_args: --use-new-run --build-arg OPENTOFU_VERSION=${{ env.OPENTOFU_VERSION }}
 
 #          image: ${{ env.IMAGE_REPO_NAME }}
 #          registry: ghcr.io
@@ -48,4 +46,4 @@ jobs:
 #          tag_with_latest: false
 #          cache: true
 #          cache_registry: ${{ env.IMAGE_REPO_NAME }}-cache
-#          extra_args: --use-new-run --build-arg TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
+
